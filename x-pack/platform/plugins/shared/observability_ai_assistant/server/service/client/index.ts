@@ -127,12 +127,15 @@ export class ObservabilityAIAssistantClient {
     return response.hits.hits[0];
   };
 
-  private getConversationUpdateValues = (lastUpdated: string) => {
+  private getConversationUpdateValues = (
+    lastUpdated: string,
+    overrideUser?: { id?: string; name: string }
+  ) => {
     return {
       conversation: {
         last_updated: lastUpdated,
       },
-      user: this.dependencies.user,
+      user: overrideUser ? overrideUser : this.dependencies.user,
       namespace: this.dependencies.namespace,
     };
   };
@@ -173,6 +176,7 @@ export class ObservabilityAIAssistantClient {
     title: predefinedTitle,
     conversationId: predefinedConversationId,
     disableFunctions = false,
+    overrideUser,
   }: {
     messages: Message[];
     connectorId: string;
@@ -190,6 +194,7 @@ export class ObservabilityAIAssistantClient {
       | {
           except: string[];
         };
+    overrideUser?: { id?: string; name: string };
   }): Observable<Exclude<StreamingChatResponseEvent, ChatCompletionErrorEvent>> => {
     return new LangTracer(context.active()).startActiveSpan(
       'complete',
@@ -377,19 +382,22 @@ export class ObservabilityAIAssistantClient {
               }
 
               return from(
-                this.create({
-                  '@timestamp': new Date().toISOString(),
-                  conversation: {
-                    title,
-                    id: conversationId,
-                    token_count: tokenCountResult,
+                this.create(
+                  {
+                    '@timestamp': new Date().toISOString(),
+                    conversation: {
+                      title,
+                      id: conversationId,
+                      token_count: tokenCountResult,
+                    },
+                    public: !!isPublic,
+                    labels: {},
+                    numeric_labels: {},
+                    systemMessage,
+                    messages: initialMessagesWithAddedMessages,
                   },
-                  public: !!isPublic,
-                  labels: {},
-                  numeric_labels: {},
-                  systemMessage,
-                  messages: initialMessagesWithAddedMessages,
-                })
+                  overrideUser
+                )
               ).pipe(
                 map((conversation): ConversationCreateEvent => {
                   return {
@@ -600,7 +608,10 @@ export class ObservabilityAIAssistantClient {
     return updatedConversation;
   };
 
-  create = async (conversation: ConversationCreateRequest): Promise<Conversation> => {
+  create = async (
+    conversation: ConversationCreateRequest,
+    overrideUser?: { id?: string; name: string }
+  ): Promise<Conversation> => {
     const now = new Date().toISOString();
 
     const createdConversation: Conversation = merge(
@@ -610,7 +621,7 @@ export class ObservabilityAIAssistantClient {
         '@timestamp': now,
         conversation: { id: conversation.conversation.id || v4() },
       },
-      this.getConversationUpdateValues(now)
+      this.getConversationUpdateValues(now, overrideUser)
     );
 
     await this.dependencies.esClient.asInternalUser.index({

@@ -183,6 +183,15 @@ async function executor(
 
   const resources = await initResources(request);
   const client = await resources.service.getClient({ request, scopes: ['observability'] });
+
+  const rulesClient = await (
+    await resources.plugins.alerting.start()
+  ).getRulesClientWithRequest(request);
+
+  const rule = await rulesClient.get({
+    id: execOptions.params.rule.id,
+  });
+
   const functionClient = await resources.service.getFunctionClient({
     signal: new AbortController().signal,
     resources,
@@ -313,6 +322,7 @@ If available, include the link of the conversation at the end of your answer.`
       signal: new AbortController().signal,
       kibanaPublicUrl: (await resources.plugins.core.start()).http.basePath.publicBaseUrl,
       instructions: [backgroundInstruction],
+      overrideUser: rule.createdBy ? { name: rule.createdBy } : undefined,
       messages: [
         {
           '@timestamp': new Date().toISOString(),
