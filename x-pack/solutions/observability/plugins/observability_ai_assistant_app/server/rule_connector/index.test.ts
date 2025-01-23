@@ -135,6 +135,17 @@ describe('observabilityAIAssistant rule_connector', () => {
             };
           },
         },
+        alerting: {
+          start: async () => {
+            return {
+              getRulesClientWithRequest: jest.fn().mockResolvedValue({
+                async get() {
+                  return { createdBy: 'user_1' };
+                },
+              }),
+            };
+          },
+        },
       },
     } as unknown as ObservabilityAIAssistantRouteHandlerResources);
 
