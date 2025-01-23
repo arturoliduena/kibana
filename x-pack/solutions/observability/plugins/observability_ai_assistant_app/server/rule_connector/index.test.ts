@@ -113,6 +113,17 @@ describe('observabilityAIAssistant rule_connector', () => {
               };
             },
           },
+          alerting: {
+            start: async () => {
+              return {
+                getRulesClientWithRequest: jest.fn().mockResolvedValue({
+                  async get() {
+                    return { createdBy: 'user_1' };
+                  },
+                }),
+              };
+            },
+          },
         },
       } as unknown as ObservabilityAIAssistantRouteHandlerResources);
 
@@ -127,6 +138,7 @@ describe('observabilityAIAssistant rule_connector', () => {
           message: 'hello',
           connector: 'azure-open-ai',
           alerts: { new: [{ _id: 'new_alert' }], recovered: [] },
+          rule: { id: 'foo', name: 'bar' },
         },
       } as unknown as ObsAIAssistantConnectorTypeExecutorOptions);
 
