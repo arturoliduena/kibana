@@ -33,7 +33,6 @@ function createNewConversation({
     },
     labels: {},
     numeric_labels: {},
-    public: false,
   };
 }
 

@@ -308,7 +308,7 @@ If available, include the link of the conversation at the end of your answer.`
     .complete({
       functionClient,
       persist: true,
-      isPublic: true,
+      isSystem: true,
       connectorId: params.connector,
       signal: new AbortController().signal,
       kibanaPublicUrl: (await resources.plugins.core.start()).http.basePath.publicBaseUrl,

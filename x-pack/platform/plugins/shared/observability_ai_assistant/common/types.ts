@@ -68,7 +68,7 @@ export interface Conversation {
   labels: Record<string, string>;
   numeric_labels: Record<string, number>;
   namespace: string;
-  public: boolean;
+  system?: boolean;
 }
 
 export type ConversationRequestBase = Omit<Conversation, 'user' | 'conversation' | 'namespace'> & {
