@@ -172,7 +172,7 @@ export class ObservabilityAIAssistantClient {
     signal,
     persist,
     kibanaPublicUrl,
-    isPublic,
+    isSystem = false,
     title: predefinedTitle,
     conversationId: predefinedConversationId,
     disableFunctions = false,
@@ -184,7 +184,7 @@ export class ObservabilityAIAssistantClient {
     persist: boolean;
     conversationId?: string;
     title?: string;
-    isPublic?: boolean;
+    isSystem?: boolean;
     kibanaPublicUrl?: string;
     instructions?: AdHocInstruction[];
     simulateFunctionCalling?: boolean;
@@ -409,7 +409,7 @@ export class ObservabilityAIAssistantClient {
                       id: conversationId,
                       token_count: tokenCountResult,
                     },
-                    public: !!isPublic,
+                    system: !!isSystem,
                     labels: {},
                     numeric_labels: {},
                     messages: initialMessagesWithAddedMessages,

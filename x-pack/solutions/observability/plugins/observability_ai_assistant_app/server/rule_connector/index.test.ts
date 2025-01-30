@@ -137,7 +137,7 @@ describe('observabilityAIAssistant rule_connector', () => {
       expect(completeMock).toHaveBeenCalledWith(
         expect.objectContaining({
           persist: true,
-          isPublic: true,
+          isSystem: true,
           connectorId: 'azure-open-ai',
           kibanaPublicUrl: 'http://kibana.com',
           messages: [
