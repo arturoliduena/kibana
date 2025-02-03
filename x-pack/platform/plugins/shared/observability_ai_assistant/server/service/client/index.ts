@@ -329,6 +329,10 @@ export class ObservabilityAIAssistantClient {
                         return throwError(() => createConversationNotFoundError());
                       }
 
+                      if (conversation._source?.system) {
+                        return throwError(() => new Error('Cannot update system conversation'));
+                      }
+
                       const persistedTokenCount = conversation._source?.conversation
                         .token_count ?? {
                         prompt: 0,
@@ -620,6 +624,24 @@ export class ObservabilityAIAssistantClient {
     });
 
     return createdConversation;
+  };
+
+  forkConversation = async (conversationId: string, isSystem: boolean): Promise<Conversation> => {
+    const conversation = await this.getConversationWithMetaFields(conversationId);
+
+    if (!conversation) {
+      throw notFound();
+    }
+    const _source = conversation._source!;
+    const forkedConversation: Conversation = {
+      ..._source,
+      conversation: {
+        ..._source.conversation,
+        id: v4(),
+      },
+      system: isSystem,
+    };
+    return this.create(forkedConversation);
   };
 
   recall = async ({

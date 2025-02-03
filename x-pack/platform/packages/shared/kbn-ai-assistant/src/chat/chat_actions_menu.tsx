@@ -133,7 +133,7 @@ export function ChatActionsMenu({
               },
               {
                 name: i18n.translate('xpack.aiAssistant.chatHeader.actions.copyConversation', {
-                  defaultMessage: 'Copy conversation',
+                  defaultMessage: 'Fork conversation',
                 }),
                 disabled: !conversationId,
                 onClick: () => {

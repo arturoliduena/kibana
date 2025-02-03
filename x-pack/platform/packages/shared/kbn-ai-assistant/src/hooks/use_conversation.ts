@@ -48,6 +48,7 @@ export interface UseConversationProps {
 export type UseConversationResult = {
   conversation: AbortableAsyncState<ConversationCreateRequest | Conversation | undefined>;
   saveTitle: (newTitle: string) => void;
+  forkConversation: () => Promise<Conversation>;
 } & Omit<UseChatResult, 'setMessages'>;
 
 const DEFAULT_INITIAL_MESSAGES: Message[] = [];
@@ -103,6 +104,32 @@ export function useConversation({
         notifications!.toasts.addError(err, {
           title: i18n.translate('xpack.aiAssistant.errorUpdatingConversation', {
             defaultMessage: 'Could not update conversation',
+          }),
+        });
+        throw err;
+      });
+  };
+
+  const fork = () => {
+    if (!displayedConversationId || !conversation.value) {
+      throw new Error('Cannot save fork if conversation is not stored');
+    }
+    return service
+      .callApi(`POST /internal/observability_ai_assistant/conversation/{conversationId}/fork`, {
+        signal: null,
+        params: {
+          path: {
+            conversationId: displayedConversationId,
+          },
+          body: {
+            isSystem: false,
+          },
+        },
+      })
+      .catch((err) => {
+        notifications!.toasts.addError(err, {
+          title: i18n.translate('xpack.aiAssistant.errorForkingConversation', {
+            defaultMessage: 'Could not fork conversation',
           }),
         });
         throw err;
@@ -181,5 +208,6 @@ export function useConversation({
           onConversationUpdate?.(nextConversation);
         });
     },
+    forkConversation: fork,
   };
 }
