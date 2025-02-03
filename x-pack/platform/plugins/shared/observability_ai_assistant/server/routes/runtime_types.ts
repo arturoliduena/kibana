@@ -70,7 +70,7 @@ export const baseConversationRt: t.Type<ConversationRequestBase> = t.type({
   messages: t.array(messageRt),
   labels: t.record(t.string, t.string),
   numeric_labels: t.record(t.string, t.number),
-  public: toBooleanRt,
+  system: toBooleanRt,
 });
 
 export const assistantScopeType = t.union([

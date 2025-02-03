@@ -46,7 +46,6 @@ import { SimulatedFunctionCallingCallout } from './simulated_function_calling_ca
 import { WelcomeMessage } from './welcome_message';
 import { useLicense } from '../hooks/use_license';
 import { PromptEditor } from '../prompt_editor/prompt_editor';
-import { deserializeMessage } from '../utils/deserialize_message';
 
 const fullHeightClassName = css`
   height: 100%;
@@ -117,6 +116,7 @@ export function ChatBody({
   onConversationUpdate,
   onToggleFlyoutPositionMode,
   navigateToConversation,
+  handleRefreshConversations,
 }: {
   connectors: ReturnType<typeof useGenAIConnectors>;
   currentUser?: Pick<AuthenticatedUser, 'full_name' | 'username'>;
@@ -129,6 +129,7 @@ export function ChatBody({
   onConversationUpdate: (conversation: { conversation: Conversation['conversation'] }) => void;
   onToggleFlyoutPositionMode?: (flyoutPositionMode: FlyoutPositionMode) => void;
   navigateToConversation?: (conversationId?: string) => void;
+  handleRefreshConversations: () => void;
 }) {
   const license = useLicense();
   const hasCorrectLicense = license?.hasAtLeast('enterprise');
@@ -140,14 +141,15 @@ export function ChatBody({
 
   const { simulatedFunctionCallingEnabled } = useSimulatedFunctionCalling();
 
-  const { conversation, messages, next, state, stop, saveTitle } = useConversation({
-    initialConversationId,
-    initialMessages,
-    initialTitle,
-    chatService,
-    connectorId: connectors.selectedConnector,
-    onConversationUpdate,
-  });
+  const { conversation, messages, next, state, stop, saveTitle, forkConversation } =
+    useConversation({
+      initialConversationId,
+      initialMessages,
+      initialTitle,
+      chatService,
+      connectorId: connectors.selectedConnector,
+      onConversationUpdate,
+    });
 
   const timelineContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -244,14 +246,10 @@ export function ChatBody({
   });
 
   const handleCopyConversation = () => {
-    const deserializedMessages = (conversation.value?.messages ?? messages).map(deserializeMessage);
-
-    const content = JSON.stringify({
-      title: initialTitle,
-      messages: deserializedMessages,
+    forkConversation().then((response) => {
+      handleRefreshConversations();
+      navigateToConversation?.(response.conversation.id);
     });
-
-    navigator.clipboard?.writeText(content || '');
   };
 
   const handleActionClick = ({
