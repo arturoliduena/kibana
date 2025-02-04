@@ -190,7 +190,12 @@ export function useConversation({
   return {
     conversation,
     state,
-    next,
+    next: (_messages: Message[]) =>
+      next(_messages, (error) => {
+        if (error) {
+          conversation.refresh();
+        }
+      }),
     stop,
     messages,
     saveTitle: (title: string) => {
