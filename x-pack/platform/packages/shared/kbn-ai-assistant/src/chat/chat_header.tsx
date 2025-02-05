@@ -47,6 +47,7 @@ export function ChatHeader({
   loading,
   title,
   onCopyConversation,
+  onForkConversation,
   onSaveTitle,
   onToggleFlyoutPositionMode,
   navigateToConversation,
@@ -58,6 +59,7 @@ export function ChatHeader({
   loading: boolean;
   title: string;
   onCopyConversation: () => void;
+  onForkConversation: () => void;
   onSaveTitle: (title: string) => void;
   onToggleFlyoutPositionMode?: (newFlyoutPositionMode: FlyoutPositionMode) => void;
   navigateToConversation?: (nextConversationId?: string) => void;
@@ -201,6 +203,7 @@ export function ChatHeader({
                 conversationId={conversationId}
                 disabled={licenseInvalid}
                 onCopyConversationClick={onCopyConversation}
+                onForkConversationClick={onForkConversation}
               />
             </EuiFlexItem>
           </EuiFlexGroup>

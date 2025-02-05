@@ -25,11 +25,13 @@ export function ChatActionsMenu({
   conversationId,
   disabled,
   onCopyConversationClick,
+  onForkConversationClick,
 }: {
   connectors: UseGenAIConnectorsResult;
   conversationId?: string;
   disabled: boolean;
   onCopyConversationClick: () => void;
+  onForkConversationClick: () => void;
 }) {
   const { application, http } = useKibana().services;
   const knowledgeBase = useKnowledgeBase();
@@ -133,12 +135,22 @@ export function ChatActionsMenu({
               },
               {
                 name: i18n.translate('xpack.aiAssistant.chatHeader.actions.copyConversation', {
-                  defaultMessage: 'Fork conversation',
+                  defaultMessage: 'Copy conversation',
                 }),
                 disabled: !conversationId,
                 onClick: () => {
                   toggleActionsMenu();
                   onCopyConversationClick();
+                },
+              },
+              {
+                name: i18n.translate('xpack.aiAssistant.chatHeader.actions.copyConversation', {
+                  defaultMessage: 'Fork conversation',
+                }),
+                disabled: !conversationId,
+                onClick: () => {
+                  toggleActionsMenu();
+                  onForkConversationClick();
                 },
               },
             ],

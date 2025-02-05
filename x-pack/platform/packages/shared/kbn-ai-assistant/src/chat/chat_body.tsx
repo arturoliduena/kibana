@@ -46,6 +46,7 @@ import { SimulatedFunctionCallingCallout } from './simulated_function_calling_ca
 import { WelcomeMessage } from './welcome_message';
 import { useLicense } from '../hooks/use_license';
 import { PromptEditor } from '../prompt_editor/prompt_editor';
+import { deserializeMessage } from '../utils/deserialize_message';
 
 const fullHeightClassName = css`
   height: 100%;
@@ -245,11 +246,22 @@ export function ChatBody({
     }
   });
 
-  const handleCopyConversation = () => {
+  const handleForkConversation = () => {
     forkConversation().then((response) => {
       handleRefreshConversations();
       navigateToConversation?.(response.conversation.id);
     });
+  };
+
+  const handleCopyConversation = () => {
+    const deserializedMessages = (conversation.value?.messages ?? messages).map(deserializeMessage);
+
+    const content = JSON.stringify({
+      title: initialTitle,
+      messages: deserializedMessages,
+    });
+
+    navigator.clipboard?.writeText(content || '');
   };
 
   const handleActionClick = ({
@@ -514,6 +526,7 @@ export function ChatBody({
           loading={isLoading}
           title={title}
           onCopyConversation={handleCopyConversation}
+          onForkConversation={handleForkConversation}
           onSaveTitle={(newTitle) => {
             saveTitle(newTitle);
           }}
