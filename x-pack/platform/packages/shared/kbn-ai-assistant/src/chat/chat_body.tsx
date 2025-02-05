@@ -366,7 +366,7 @@ export function ChatBody({
               paddingSize="m"
               className={animClassName(euiTheme)}
             >
-              {connectors.connectors?.length === 0 || messages.length === 1 ? (
+              {connectors.connectors?.length === 0 || !messages.length ? (
                 <WelcomeMessage
                   connectors={connectors}
                   knowledgeBase={knowledgeBase}
