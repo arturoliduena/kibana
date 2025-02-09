@@ -64,6 +64,7 @@ export function getTimelineItemsfromConversation({
   currentUser,
   hasConnector,
   messages,
+  isSystem,
   chatState,
   onActionClick,
 }: {
@@ -71,6 +72,7 @@ export function getTimelineItemsfromConversation({
   currentUser?: Pick<AuthenticatedUser, 'username' | 'full_name'>;
   hasConnector: boolean;
   messages: Message[];
+  isSystem?: boolean;
   chatState: ChatState;
   onActionClick: ({
     message,
@@ -89,12 +91,12 @@ export function getTimelineItemsfromConversation({
       loading: false,
       message: {
         '@timestamp': new Date().toISOString(),
-        message: { role: MessageRole.User },
+        message: { role: isSystem ? MessageRole.System : MessageRole.User },
       },
       title: i18n.translate('xpack.aiAssistant.conversationStartTitle', {
         defaultMessage: 'started a conversation',
       }),
-      role: MessageRole.User,
+      role: isSystem ? MessageRole.System : MessageRole.User,
     },
     ...messages.map((message, index) => {
       const id = v4();

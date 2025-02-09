@@ -47,6 +47,7 @@ export interface UseConversationProps {
 
 export type UseConversationResult = {
   conversation: AbortableAsyncState<ConversationCreateRequest | Conversation | undefined>;
+  isSystem?: boolean;
   saveTitle: (newTitle: string) => void;
   forkConversation: () => Promise<Conversation>;
 } & Omit<UseChatResult, 'setMessages'>;
@@ -189,6 +190,7 @@ export function useConversation({
 
   return {
     conversation,
+    isSystem: conversation.value?.system,
     state,
     next: (_messages: Message[]) =>
       next(_messages, (error) => {

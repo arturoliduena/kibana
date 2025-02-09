@@ -150,7 +150,7 @@ export function ChatBody({
     false
   );
 
-  const { conversation, messages, next, state, stop, saveTitle, forkConversation } =
+  const { conversation, isSystem, messages, next, state, stop, saveTitle, forkConversation } =
     useConversation({
       initialConversationId,
       initialMessages,
@@ -402,6 +402,7 @@ export function ChatBody({
               ) : (
                 <ChatTimeline
                   messages={messages}
+                  isSystem={isSystem}
                   knowledgeBase={knowledgeBase}
                   chatService={chatService}
                   currentUser={currentUser}
@@ -447,7 +448,7 @@ export function ChatBody({
             className={promptEditorContainerClassName}
           >
             <PromptEditor
-              disabled={!connectors.selectedConnector || !hasCorrectLicense}
+              disabled={!connectors.selectedConnector || !hasCorrectLicense || !!isSystem}
               hidden={connectors.loading || connectors.connectors?.length === 0}
               loading={isLoading}
               onChangeHeight={handleChangeHeight}

@@ -55,6 +55,7 @@ import {
   type Message,
   KnowledgeBaseType,
   KnowledgeBaseEntryRole,
+  ConversationAccess,
 } from '../../../common/types';
 import { withoutTokenCountEvents } from '../../../common/utils/without_token_count_events';
 import { CONTEXT_FUNCTION_NAME } from '../../functions/context';
@@ -170,6 +171,7 @@ export class ObservabilityAIAssistantClient {
     persist,
     kibanaPublicUrl,
     isSystem = false,
+    access = ConversationAccess.Private,
     title: predefinedTitle,
     conversationId: predefinedConversationId,
     disableFunctions = false,
@@ -181,6 +183,7 @@ export class ObservabilityAIAssistantClient {
     persist: boolean;
     conversationId?: string;
     title?: string;
+    access?: ConversationAccess;
     isSystem?: boolean;
     kibanaPublicUrl?: string;
     instructions?: AdHocInstruction[];
@@ -361,6 +364,9 @@ export class ObservabilityAIAssistantClient {
                           // update messages and system message
                           { messages: initialMessagesWithAddedMessages, systemMessage },
 
+                          // update access
+                          { access },
+
                           // update token count
                           {
                             conversation: {
@@ -393,6 +399,7 @@ export class ObservabilityAIAssistantClient {
                         id: conversationId,
                         token_count: tokenCountResult,
                       },
+                      access,
                       system: !!isSystem,
                       labels: {},
                       numeric_labels: {},

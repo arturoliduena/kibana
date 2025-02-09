@@ -104,6 +104,7 @@ export const conversationComponentTemplate: ClusterComponentTemplate['component_
         system: {
           type: 'boolean',
         },
+        access: keyword,
       },
     },
   };
