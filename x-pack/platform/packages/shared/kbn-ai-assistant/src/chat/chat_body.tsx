@@ -134,7 +134,7 @@ export function ChatBody({
   onConversationUpdate: (conversation: { conversation: Conversation['conversation'] }) => void;
   onToggleFlyoutPositionMode?: (flyoutPositionMode: FlyoutPositionMode) => void;
   navigateToConversation?: (conversationId?: string) => void;
-  handleRefreshConversations: () => void;
+  handleRefreshConversations?: () => void;
 }) {
   const license = useLicense();
   const hasCorrectLicense = license?.hasAtLeast('enterprise');
@@ -259,7 +259,7 @@ export function ChatBody({
 
   const handleForkConversation = () => {
     forkConversation().then((response) => {
-      handleRefreshConversations();
+      handleRefreshConversations?.();
       navigateToConversation?.(response.conversation.id);
     });
   };
