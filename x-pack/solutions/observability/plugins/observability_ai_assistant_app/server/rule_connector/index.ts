@@ -35,7 +35,10 @@ import { concatenateChatCompletionChunks } from '@kbn/observability-ai-assistant
 import { CompatibleJSONSchema } from '@kbn/observability-ai-assistant-plugin/common/functions/types';
 import { AlertDetailsContextualInsightsService } from '@kbn/observability-plugin/server/services';
 import { getSystemMessageFromInstructions } from '@kbn/observability-ai-assistant-plugin/server/service/util/get_system_message_from_instructions';
-import { AdHocInstruction } from '@kbn/observability-ai-assistant-plugin/common/types';
+import {
+  AdHocInstruction,
+  ConversationAccess,
+} from '@kbn/observability-ai-assistant-plugin/common/types';
 import { EXECUTE_CONNECTOR_FUNCTION_NAME } from '@kbn/observability-ai-assistant-plugin/server/functions/execute_connector';
 import { convertSchemaToOpenApi } from './convert_schema_to_open_api';
 import { OBSERVABILITY_AI_ASSISTANT_CONNECTOR_ID } from '../../common/rule_connector';
@@ -245,6 +248,7 @@ If available, include the link of the conversation at the end of your answer.`
     .complete({
       functionClient,
       persist: true,
+      access: ConversationAccess.Shared,
       isSystem: true,
       connectorId: execOptions.params.connector,
       signal: new AbortController().signal,
