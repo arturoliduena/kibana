@@ -71,9 +71,9 @@ export const baseConversationRt: t.Type<ConversationRequestBase> = t.intersectio
     messages: t.array(messageRt),
     labels: t.record(t.string, t.string),
     numeric_labels: t.record(t.string, t.number),
-    system: toBooleanRt,
   }),
   t.partial({
+    system: toBooleanRt,
     systemMessage: t.string,
   }),
 ]);
