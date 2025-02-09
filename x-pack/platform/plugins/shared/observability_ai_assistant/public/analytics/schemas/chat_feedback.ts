@@ -12,7 +12,10 @@ import { ObservabilityAIAssistantTelemetryEventType } from '../telemetry_event_t
 
 export interface ChatFeedback {
   feedback: Feedback;
-  conversation: Omit<Omit<Conversation, 'messages' | 'systemMessage'>, 'conversation'> & {
+  conversation: Omit<
+    Omit<Conversation, 'messages' | 'systemMessage' | 'system' | 'access'>,
+    'conversation'
+  > & {
     conversation: Omit<Conversation['conversation'], 'title'>;
   };
 }
@@ -105,12 +108,6 @@ export const chatFeedbackEventSchema: EventTypeOpts<ChatFeedback> = {
           type: 'text',
           _meta: {
             description: 'The namespace of the conversation.',
-          },
-        },
-        public: {
-          type: 'boolean',
-          _meta: {
-            description: 'Whether the conversation is public or not.',
           },
         },
       },
