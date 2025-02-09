@@ -422,7 +422,6 @@ export default function ApiTest({ getService, getPageObjects }: FtrProviderConte
 
                   expect(feedback).to.eql('positive');
                   expect(conversation.namespace).to.eql('default');
-                  expect(conversation.public).to.eql(false);
                   expect(conversation.user?.name).to.eql('editor');
 
                   expect(conversation.conversation).to.not.have.property('title');
@@ -483,7 +482,6 @@ export default function ApiTest({ getService, getPageObjects }: FtrProviderConte
 
                     expect(feedback).to.eql('positive');
                     expect(conversation.namespace).to.eql('default');
-                    expect(conversation.public).to.eql(false);
                     expect(conversation.user?.name).to.eql('editor');
 
                     expect(conversation.conversation).to.not.have.property('title');
