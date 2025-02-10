@@ -144,7 +144,6 @@ export default function ApiTest({ getService, getPageObjects }: FtrProviderConte
             },
           },
           '@timestamp': '2024-04-18T14:29:22.948',
-          public: false,
           numeric_labels: {},
           labels: {},
         },
