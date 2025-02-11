@@ -20,6 +20,7 @@ import {
 import { i18n } from '@kbn/i18n';
 import { css } from '@emotion/css';
 import { AssistantIcon } from '@kbn/ai-assistant-icon';
+import { ConversationAccess } from '@kbn/observability-ai-assistant-plugin/public';
 import { ChatActionsMenu } from './chat_actions_menu';
 import type { UseGenAIConnectorsResult } from '../hooks/use_genai_connectors';
 import { FlyoutPositionMode } from './chat_flyout';
@@ -46,6 +47,7 @@ export function ChatHeader({
   licenseInvalid,
   loading,
   title,
+  access,
   onCopyConversation,
   onForkConversation,
   onSaveTitle,
@@ -58,6 +60,7 @@ export function ChatHeader({
   licenseInvalid: boolean;
   loading: boolean;
   title: string;
+  access?: ConversationAccess;
   onCopyConversation: () => void;
   onForkConversation: () => void;
   onSaveTitle: (title: string) => void;
@@ -204,6 +207,7 @@ export function ChatHeader({
                 disabled={licenseInvalid}
                 onCopyConversationClick={onCopyConversation}
                 onForkConversationClick={onForkConversation}
+                access={access}
               />
             </EuiFlexItem>
           </EuiFlexGroup>
