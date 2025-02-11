@@ -15,7 +15,10 @@ import {
   EuiPopover,
   EuiToolTip,
 } from '@elastic/eui';
-import { ConnectorSelectorBase } from '@kbn/observability-ai-assistant-plugin/public';
+import {
+  ConnectorSelectorBase,
+  ConversationAccess,
+} from '@kbn/observability-ai-assistant-plugin/public';
 import type { UseGenAIConnectorsResult } from '../hooks/use_genai_connectors';
 import { useKibana } from '../hooks/use_kibana';
 import { useKnowledgeBase } from '../hooks';
@@ -26,10 +29,12 @@ export function ChatActionsMenu({
   disabled,
   onCopyConversationClick,
   onForkConversationClick,
+  access,
 }: {
   connectors: UseGenAIConnectorsResult;
   conversationId?: string;
   disabled: boolean;
+  access?: ConversationAccess;
   onCopyConversationClick: () => void;
   onForkConversationClick: () => void;
 }) {
@@ -147,7 +152,7 @@ export function ChatActionsMenu({
                 name: i18n.translate('xpack.aiAssistant.chatHeader.actions.forkConversation', {
                   defaultMessage: 'Fork conversation',
                 }),
-                disabled: !conversationId,
+                disabled: !conversationId || access !== ConversationAccess.Shared,
                 onClick: () => {
                   toggleActionsMenu();
                   onForkConversationClick();

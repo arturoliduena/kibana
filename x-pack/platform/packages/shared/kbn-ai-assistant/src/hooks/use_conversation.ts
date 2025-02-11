@@ -12,7 +12,10 @@ import type {
   ConversationCreateRequest,
   Message,
 } from '@kbn/observability-ai-assistant-plugin/common';
-import type { ObservabilityAIAssistantChatService } from '@kbn/observability-ai-assistant-plugin/public';
+import type {
+  ConversationAccess,
+  ObservabilityAIAssistantChatService,
+} from '@kbn/observability-ai-assistant-plugin/public';
 import type { AbortableAsyncState } from '@kbn/observability-ai-assistant-plugin/public';
 import type { UseChatResult } from '@kbn/observability-ai-assistant-plugin/public';
 import { EMPTY_CONVERSATION_TITLE } from '../i18n';
@@ -48,6 +51,7 @@ export interface UseConversationProps {
 export type UseConversationResult = {
   conversation: AbortableAsyncState<ConversationCreateRequest | Conversation | undefined>;
   isSystem?: boolean;
+  access?: ConversationAccess;
   saveTitle: (newTitle: string) => void;
   forkConversation: () => Promise<Conversation>;
 } & Omit<UseChatResult, 'setMessages'>;
@@ -191,6 +195,7 @@ export function useConversation({
   return {
     conversation,
     isSystem: conversation.value?.system,
+    access: conversation.value?.access,
     state,
     next: (_messages: Message[]) =>
       next(_messages, (error) => {

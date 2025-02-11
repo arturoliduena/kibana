@@ -138,6 +138,17 @@ export class ObservabilityAIAssistantClient {
     };
   };
 
+  private isConversationOwnedByUser = (conversation: Conversation): boolean => {
+    const user = this.dependencies.user;
+    if (!conversation.user || !user) {
+      return false;
+    }
+
+    return conversation.user.id
+      ? conversation.user.id === user.id
+      : conversation.user.name === user.name;
+  };
+
   get = async (conversationId: string): Promise<Conversation> => {
     const conversation = await this.getConversationWithMetaFields(conversationId);
 
@@ -300,6 +311,10 @@ export class ObservabilityAIAssistantClient {
           switchMap((conversation) => {
             if (isConversationUpdate && !conversation) {
               return throwError(() => createConversationNotFoundError());
+            }
+
+            if (conversation?._source && !this.isConversationOwnedByUser(conversation?._source!)) {
+              throw new Error('Cannot update conversation that is not owned by the user');
             }
 
             if (conversation?._source?.system) {
@@ -571,6 +586,10 @@ export class ObservabilityAIAssistantClient {
 
     if (!persistedConversation) {
       throw notFound();
+    }
+
+    if (!this.isConversationOwnedByUser(persistedConversation._source!)) {
+      throw new Error('Cannot update conversation that is not owned by the user');
     }
 
     const updatedConversation: Conversation = merge(
