@@ -144,7 +144,7 @@ export function ChatActionsMenu({
                 },
               },
               {
-                name: i18n.translate('xpack.aiAssistant.chatHeader.actions.copyConversation', {
+                name: i18n.translate('xpack.aiAssistant.chatHeader.actions.forkConversation', {
                   defaultMessage: 'Fork conversation',
                 }),
                 disabled: !conversationId,
