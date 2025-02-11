@@ -560,6 +560,9 @@ describe('Observability AI Assistant client', () => {
                   labels: {},
                   numeric_labels: {},
                   public: false,
+                  user: {
+                    name: 'johndoe',
+                  },
                   messages: [user('How many alerts do I have?')],
                 },
               },
