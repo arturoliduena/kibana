@@ -441,7 +441,7 @@ export function ChatBody({
                       <EuiPanel paddingSize="m" hasShadow={false} color="subdued">
                         <EuiFlexGroup>
                           <EuiFlexItem grow={false}>
-                            <EuiIcon size="l" type="plugs" />
+                            <EuiIcon size="l" type="branch" />
                           </EuiFlexItem>
                           <EuiFlexItem grow>
                             <EuiText size="xs">
