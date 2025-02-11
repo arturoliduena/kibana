@@ -75,7 +75,7 @@ export const baseConversationRt: t.Type<ConversationRequestBase> = t.intersectio
   }),
   t.partial({
     system: toBooleanRt,
-    public: toBooleanRt,
+    public: t.boolean,
     access: t.union([t.literal(ConversationAccess.Private), t.literal(ConversationAccess.Shared)]),
   }),
 ]);
