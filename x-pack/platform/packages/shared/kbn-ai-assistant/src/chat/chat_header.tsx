@@ -48,6 +48,7 @@ export function ChatHeader({
   loading,
   title,
   access,
+  isConversationOwnedByCurrentUser,
   onCopyConversation,
   onForkConversation,
   onSaveTitle,
@@ -61,6 +62,7 @@ export function ChatHeader({
   loading: boolean;
   title: string;
   access?: ConversationAccess;
+  isConversationOwnedByCurrentUser: boolean;
   onCopyConversation: () => void;
   onForkConversation: () => void;
   onSaveTitle: (title: string) => void;
@@ -120,7 +122,8 @@ export function ChatHeader({
               !conversationId ||
               !connectors.selectedConnector ||
               licenseInvalid ||
-              !Boolean(onSaveTitle)
+              !Boolean(onSaveTitle) ||
+              !isConversationOwnedByCurrentUser
             }
             onChange={(e) => {
               setNewTitle(e.currentTarget.nodeValue || '');

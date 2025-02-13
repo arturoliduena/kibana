@@ -124,7 +124,7 @@ export function ChatBody({
   handleRefreshConversations,
 }: {
   connectors: ReturnType<typeof useGenAIConnectors>;
-  currentUser?: Pick<AuthenticatedUser, 'full_name' | 'username'>;
+  currentUser?: Pick<AuthenticatedUser, 'full_name' | 'username' | 'profile_uid'>;
   flyoutPositionMode?: FlyoutPositionMode;
   initialTitle?: string;
   initialMessages?: Message[];
@@ -163,7 +163,9 @@ export function ChatBody({
     saveTitle,
     forkConversation,
     access,
+    isConversationOwnedByCurrentUser,
   } = useConversation({
+    currentUser,
     initialConversationId,
     initialMessages,
     initialTitle,
@@ -419,6 +421,7 @@ export function ChatBody({
                     knowledgeBase={knowledgeBase}
                     chatService={chatService}
                     currentUser={currentUser}
+                    isConversationOwnedByCurrentUser={isConversationOwnedByCurrentUser}
                     chatState={state}
                     hasConnector={!!connectors.connectors?.length}
                     onEdit={(editedMessage, newMessage) => {
@@ -441,7 +444,7 @@ export function ChatBody({
                       <EuiPanel paddingSize="m" hasShadow={false} color="subdued">
                         <EuiFlexGroup>
                           <EuiFlexItem grow={false}>
-                            <EuiIcon size="l" type="branch" />
+                            <EuiIcon size="l" type="bell" />
                           </EuiFlexItem>
                           <EuiFlexItem grow>
                             <EuiText size="xs">
@@ -583,6 +586,7 @@ export function ChatBody({
           navigateToConversation={
             initialMessages?.length && !initialConversationId ? undefined : navigateToConversation
           }
+          isConversationOwnedByCurrentUser={isConversationOwnedByCurrentUser}
         />
       </EuiFlexItem>
       <EuiFlexItem grow={false}>

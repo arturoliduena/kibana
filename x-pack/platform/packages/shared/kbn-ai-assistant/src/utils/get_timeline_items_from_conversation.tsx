@@ -66,6 +66,7 @@ export function getTimelineItemsfromConversation({
   messages,
   isSystem,
   chatState,
+  isConversationOwnedByCurrentUser,
   onActionClick,
 }: {
   chatService: ObservabilityAIAssistantChatService;
@@ -74,6 +75,7 @@ export function getTimelineItemsfromConversation({
   messages: Message[];
   isSystem?: boolean;
   chatState: ChatState;
+  isConversationOwnedByCurrentUser: boolean;
   onActionClick: ({
     message,
     payload,
@@ -200,14 +202,14 @@ export function getTimelineItemsfromConversation({
 
             content = convertMessageToMarkdownCodeBlock(message.message);
 
-            actions.canEdit = hasConnector;
+            actions.canEdit = hasConnector && isConversationOwnedByCurrentUser;
             display.collapsed = true;
           } else {
             // is a prompt by the user
             title = '';
             content = message.message.content;
 
-            actions.canEdit = hasConnector;
+            actions.canEdit = hasConnector && isConversationOwnedByCurrentUser;
             display.collapsed = false;
           }
 
@@ -220,8 +222,8 @@ export function getTimelineItemsfromConversation({
           break;
 
         case MessageRole.Assistant:
-          actions.canRegenerate = hasConnector;
-          actions.canGiveFeedback = true;
+          actions.canRegenerate = hasConnector && isConversationOwnedByCurrentUser;
+          actions.canGiveFeedback = isConversationOwnedByCurrentUser;
           display.hide = false;
 
           // is a function suggestion by the assistant
@@ -248,7 +250,7 @@ export function getTimelineItemsfromConversation({
               display.collapsed = true;
             }
 
-            actions.canEdit = true;
+            actions.canEdit = isConversationOwnedByCurrentUser;
           } else {
             // is an assistant response
             title = '';

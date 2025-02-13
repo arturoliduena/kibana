@@ -18,6 +18,7 @@ import type {
 } from '@kbn/observability-ai-assistant-plugin/public';
 import type { AbortableAsyncState } from '@kbn/observability-ai-assistant-plugin/public';
 import type { UseChatResult } from '@kbn/observability-ai-assistant-plugin/public';
+import type { AuthenticatedUser } from '@kbn/security-plugin/common';
 import { EMPTY_CONVERSATION_TITLE } from '../i18n';
 import { useAIAssistantAppService } from './use_ai_assistant_app_service';
 import { useKibana } from './use_kibana';
@@ -40,6 +41,7 @@ function createNewConversation({
 }
 
 export interface UseConversationProps {
+  currentUser?: Pick<AuthenticatedUser, 'full_name' | 'username' | 'profile_uid'>;
   initialConversationId?: string;
   initialMessages?: Message[];
   initialTitle?: string;
@@ -52,6 +54,7 @@ export type UseConversationResult = {
   conversation: AbortableAsyncState<ConversationCreateRequest | Conversation | undefined>;
   isSystem?: boolean;
   access?: ConversationAccess;
+  isConversationOwnedByCurrentUser: boolean;
   saveTitle: (newTitle: string) => void;
   forkConversation: () => Promise<Conversation>;
 } & Omit<UseChatResult, 'setMessages'>;
@@ -59,6 +62,7 @@ export type UseConversationResult = {
 const DEFAULT_INITIAL_MESSAGES: Message[] = [];
 
 export function useConversation({
+  currentUser,
   initialConversationId: initialConversationIdFromProps,
   initialMessages: initialMessagesFromProps = DEFAULT_INITIAL_MESSAGES,
   initialTitle: initialTitleFromProps,
@@ -192,10 +196,22 @@ export function useConversation({
       }
     );
 
+  const isConversationOwnedByUser = (conversationUser: Conversation['user']): boolean => {
+    if (!conversationUser || !currentUser) {
+      return false;
+    }
+
+    return conversationUser.id && currentUser.profile_uid
+      ? conversationUser.id === currentUser.profile_uid
+      : conversationUser.name === currentUser.username;
+  };
   return {
     conversation,
     isSystem: conversation.value?.system,
     access: conversation.value?.access,
+    isConversationOwnedByCurrentUser: isConversationOwnedByUser(
+      (conversation.value as Conversation)?.user
+    ),
     state,
     next: (_messages: Message[]) =>
       next(_messages, (error) => {
