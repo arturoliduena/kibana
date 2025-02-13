@@ -149,8 +149,8 @@ export function ChatActionsMenu({
                 },
               },
               {
-                name: i18n.translate('xpack.aiAssistant.chatHeader.actions.forkConversation', {
-                  defaultMessage: 'Fork conversation',
+                name: i18n.translate('xpack.aiAssistant.chatHeader.actions.duplicateConversation', {
+                  defaultMessage: 'Duplicate conversation',
                 }),
                 disabled: !conversationId || access !== ConversationAccess.Shared,
                 onClick: () => {
