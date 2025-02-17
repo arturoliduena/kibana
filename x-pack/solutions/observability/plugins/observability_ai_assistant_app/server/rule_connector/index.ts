@@ -5,7 +5,7 @@
  * 2.0.
  */
 
-import { filter } from 'rxjs';
+import { filter, tap } from 'rxjs';
 import { get } from 'lodash';
 import dedent from 'dedent';
 import { i18n } from '@kbn/i18n';
@@ -198,12 +198,21 @@ async function executor(
     await resources.plugins.actions.start()
   ).getActionsClientWithRequest(request);
 
+  const rulesClient = await (
+    await resources.plugins.alerting.start()
+  ).getRulesClientWithRequest(request);
+
+  const rule = await rulesClient.get({
+    id: execOptions.params.rule.id,
+  });
+
   await Promise.all(
     params.prompts.map((prompt) =>
       executeAlertsChatCompletion(
         resources,
         prompt,
         params,
+        rule.createdBy ? { name: rule.createdBy } : undefined,
         alertDetailsContextService,
         client,
         functionClient,
@@ -220,6 +229,7 @@ async function executeAlertsChatCompletion(
   resources: ObservabilityAIAssistantRouteHandlerResources,
   prompt: { statuses: string[]; message: string },
   params: ConnectorParamsType,
+  ruleCreatedBy: { name: string } | undefined,
   alertDetailsContextService: AlertDetailsContextualInsightsService,
   client: ObservabilityAIAssistantClient,
   functionClient: ChatFunctionClient,
@@ -308,6 +318,8 @@ If available, include the link of the conversation at the end of your answer.`
     }
   );
 
+  let conversationId: string;
+
   client
     .complete({
       functionClient,
@@ -383,6 +395,11 @@ If available, include the link of the conversation at the end of your answer.`
       ],
     })
     .pipe(
+      tap((event) => {
+        if (event.type === StreamingChatResponseEventType.ConversationCreate) {
+          conversationId = event.conversation.id;
+        }
+      }),
       filter(
         (event): event is ChatCompletionChunkEvent =>
           event.type === StreamingChatResponseEventType.ChatCompletionChunk
@@ -390,6 +407,11 @@ If available, include the link of the conversation at the end of your answer.`
     )
     .pipe(concatenateChatCompletionChunks())
     .subscribe({
+      complete: () => {
+        if (ruleCreatedBy && conversationId) {
+          client.setConversationUser(conversationId, { name: ruleCreatedBy.name });
+        }
+      },
       error: (err) => {
         logger.error(err);
       },

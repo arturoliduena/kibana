@@ -686,6 +686,37 @@ export class ObservabilityAIAssistantClient {
     return createdConversation;
   };
 
+  setConversationUser = async (
+    conversationId: string,
+    user: {
+      id?: string;
+      name: string;
+    }
+  ): Promise<Conversation> => {
+    const persistedConversation = await this.getConversationWithMetaFields(conversationId);
+
+    if (!persistedConversation) {
+      throw notFound();
+    }
+
+    const updatedConversation: Conversation = merge({}, persistedConversation._source, {
+      conversation: {
+        last_updated: new Date().toISOString(),
+      },
+      user,
+      namespace: this.dependencies.namespace,
+    });
+
+    await this.dependencies.esClient.asInternalUser.update({
+      id: persistedConversation._id!,
+      index: persistedConversation._index,
+      doc: updatedConversation,
+      refresh: true,
+    });
+
+    return updatedConversation;
+  };
+
   forkConversation = async (conversationId: string, isSystem: boolean): Promise<Conversation> => {
     const conversation = await this.getConversationWithMetaFields(conversationId);
 
