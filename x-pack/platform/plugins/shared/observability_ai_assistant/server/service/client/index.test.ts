@@ -24,7 +24,6 @@ import {
   ChatCompleteResponse,
 } from '@kbn/inference-common';
 import { InferenceClient } from '@kbn/inference-plugin/server';
-import { ConversationAccess } from '../../../common/types';
 import { createFunctionResponseMessage } from '../../../common/utils/create_function_response_message';
 import { CONTEXT_FUNCTION_NAME } from '../../functions/context';
 import { ChatFunctionClient } from '../chat_function_client';
@@ -478,7 +477,6 @@ describe('Observability AI Assistant client', () => {
             refresh: true,
             document: {
               '@timestamp': expect.any(String),
-              access: ConversationAccess.Private,
               conversation: {
                 id: expect.any(String),
                 last_updated: expect.any(String),
@@ -491,7 +489,7 @@ describe('Observability AI Assistant client', () => {
               },
               labels: {},
               numeric_labels: {},
-              system: false,
+              public: false,
               namespace: 'default',
               user: {
                 name: 'johndoe',
@@ -621,7 +619,6 @@ describe('Observability AI Assistant client', () => {
         id: 'my-es-document-id',
         doc: {
           '@timestamp': expect.any(String),
-          access: ConversationAccess.Private,
           conversation: {
             id: expect.any(String),
             last_updated: expect.any(String),

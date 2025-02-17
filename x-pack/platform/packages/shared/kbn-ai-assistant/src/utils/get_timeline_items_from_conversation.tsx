@@ -60,20 +60,22 @@ function FunctionName({ name: functionName }: { name: string }) {
 }
 
 export function getTimelineItemsfromConversation({
+  conversationId,
   chatService,
   currentUser,
   hasConnector,
+  hasUser,
   messages,
-  isSystem,
   chatState,
   isConversationOwnedByCurrentUser,
   onActionClick,
 }: {
+  conversationId?: string;
   chatService: ObservabilityAIAssistantChatService;
   currentUser?: Pick<AuthenticatedUser, 'username' | 'full_name'>;
   hasConnector: boolean;
   messages: Message[];
-  isSystem?: boolean;
+  hasUser: boolean;
   chatState: ChatState;
   isConversationOwnedByCurrentUser: boolean;
   onActionClick: ({
@@ -93,12 +95,14 @@ export function getTimelineItemsfromConversation({
       loading: false,
       message: {
         '@timestamp': new Date().toISOString(),
-        message: { role: isSystem ? MessageRole.System : MessageRole.User },
+        message: {
+          role: !!conversationId && !hasUser ? MessageRole.System : MessageRole.User,
+        },
       },
       title: i18n.translate('xpack.aiAssistant.conversationStartTitle', {
         defaultMessage: 'started a conversation',
       }),
-      role: isSystem ? MessageRole.System : MessageRole.User,
+      role: !!conversationId && !hasUser ? MessageRole.System : MessageRole.User,
     },
     ...messages.map((message, index) => {
       const id = v4();

@@ -17,11 +17,7 @@ export function getAccessQuery({
         filter: [
           {
             bool: {
-              should: [
-                { term: { public: true } },
-                { term: { system: true } },
-                ...getUserAccessFilters(user),
-              ],
+              should: [{ term: { public: true } }, ...getUserAccessFilters(user)],
               minimum_should_match: 1,
             },
           },

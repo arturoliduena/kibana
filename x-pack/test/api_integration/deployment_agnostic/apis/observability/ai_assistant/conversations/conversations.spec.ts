@@ -35,6 +35,7 @@ export default function ApiTest({ getService }: DeploymentAgnosticFtrProviderCon
         },
       },
     ],
+    public: false,
   };
 
   const conversationUpdate: ConversationUpdateRequest = merge({}, conversationCreate, {
@@ -138,7 +139,7 @@ export default function ApiTest({ getService }: DeploymentAgnosticFtrProviderCon
           systemMessage: conversationCreate.systemMessage,
           messages: conversationCreate.messages,
           namespace: 'default',
-          system: false,
+          public: conversationCreate.public,
         });
       });
 

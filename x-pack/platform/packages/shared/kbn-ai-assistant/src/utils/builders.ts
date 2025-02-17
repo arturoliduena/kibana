@@ -109,6 +109,7 @@ export function buildConversation(params?: Partial<Conversation>): Conversation 
     labels: {},
     numeric_labels: {},
     namespace: '',
+    public: false,
     ...params,
   };
 }

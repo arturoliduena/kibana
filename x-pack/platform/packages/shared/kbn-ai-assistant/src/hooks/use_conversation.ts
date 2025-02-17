@@ -12,10 +12,7 @@ import type {
   ConversationCreateRequest,
   Message,
 } from '@kbn/observability-ai-assistant-plugin/common';
-import type {
-  ConversationAccess,
-  ObservabilityAIAssistantChatService,
-} from '@kbn/observability-ai-assistant-plugin/public';
+import type { ObservabilityAIAssistantChatService } from '@kbn/observability-ai-assistant-plugin/public';
 import type { AbortableAsyncState } from '@kbn/observability-ai-assistant-plugin/public';
 import type { UseChatResult } from '@kbn/observability-ai-assistant-plugin/public';
 import type { AuthenticatedUser } from '@kbn/security-plugin/common';
@@ -37,6 +34,7 @@ function createNewConversation({
     },
     labels: {},
     numeric_labels: {},
+    public: false,
   };
 }
 
@@ -52,8 +50,8 @@ export interface UseConversationProps {
 
 export type UseConversationResult = {
   conversation: AbortableAsyncState<ConversationCreateRequest | Conversation | undefined>;
-  isSystem?: boolean;
-  access?: ConversationAccess;
+  conversationId?: string;
+  hasUser: boolean;
   isConversationOwnedByCurrentUser: boolean;
   saveTitle: (newTitle: string) => void;
   forkConversation: () => Promise<Conversation>;
@@ -130,9 +128,6 @@ export function useConversation({
           path: {
             conversationId: displayedConversationId,
           },
-          body: {
-            isSystem: false,
-          },
         },
       })
       .catch((err) => {
@@ -207,11 +202,14 @@ export function useConversation({
   };
   return {
     conversation,
-    isSystem: conversation.value?.system,
-    access: conversation.value?.access,
+    conversationId:
+      conversation.value?.conversation && 'id' in conversation.value.conversation
+        ? conversation.value.conversation.id
+        : undefined,
     isConversationOwnedByCurrentUser: isConversationOwnedByUser(
       (conversation.value as Conversation)?.user
     ),
+    hasUser: (conversation.value?.conversation && 'user' in conversation.value) ?? false,
     state,
     next: (_messages: Message[]) =>
       next(_messages, (error) => {

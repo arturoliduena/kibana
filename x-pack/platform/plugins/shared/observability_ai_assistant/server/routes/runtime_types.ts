@@ -15,7 +15,6 @@ import {
   MessageRole,
   type ObservabilityAIAssistantScreenContextRequest,
   type StarterPrompt,
-  ConversationAccess,
 } from '../../common/types';
 
 export const messageRt: t.Type<Message> = t.type({
@@ -72,12 +71,10 @@ export const baseConversationRt: t.Type<ConversationRequestBase> = t.intersectio
     messages: t.array(messageRt),
     labels: t.record(t.string, t.string),
     numeric_labels: t.record(t.string, t.number),
+    public: toBooleanRt,
   }),
   t.partial({
-    system: toBooleanRt,
     systemMessage: t.string,
-    public: t.boolean,
-    access: t.union([t.literal(ConversationAccess.Private), t.literal(ConversationAccess.Shared)]),
   }),
 ]);
 

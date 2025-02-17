@@ -111,9 +111,6 @@ const forkConversationRoute = createObservabilityAIAssistantServerRoute({
     path: t.type({
       conversationId: t.string,
     }),
-    body: t.type({
-      isSystem: t.boolean,
-    }),
   }),
   security: {
     authz: {
@@ -129,7 +126,7 @@ const forkConversationRoute = createObservabilityAIAssistantServerRoute({
       throw notImplemented();
     }
 
-    return client.forkConversation(params.path.conversationId, params.body.isSystem);
+    return client.forkConversation(params.path.conversationId);
   },
 });
 
