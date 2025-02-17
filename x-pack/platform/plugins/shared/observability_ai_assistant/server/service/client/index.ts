@@ -57,7 +57,6 @@ import {
   KnowledgeBaseType,
   KnowledgeBaseEntryRole,
   MessageRole,
-  ConversationAccess,
 } from '../../../common/types';
 import { withoutTokenCountEvents } from '../../../common/utils/without_token_count_events';
 import { CONTEXT_FUNCTION_NAME } from '../../functions/context';
@@ -184,8 +183,7 @@ export class ObservabilityAIAssistantClient {
     signal,
     persist,
     kibanaPublicUrl,
-    isSystem = false,
-    access = ConversationAccess.Private,
+    isPublic,
     title: predefinedTitle,
     conversationId: predefinedConversationId,
     disableFunctions = false,
@@ -197,8 +195,7 @@ export class ObservabilityAIAssistantClient {
     persist: boolean;
     conversationId?: string;
     title?: string;
-    access?: ConversationAccess;
-    isSystem?: boolean;
+    isPublic?: boolean;
     kibanaPublicUrl?: string;
     instructions?: AdHocInstruction[];
     simulateFunctionCalling?: boolean;
@@ -340,10 +337,6 @@ export class ObservabilityAIAssistantClient {
               throw new Error('Cannot update conversation that is not owned by the user');
             }
 
-            if (conversation?._source?.system) {
-              return throwError(() => new Error('Cannot update system conversation'));
-            }
-
             return of(conversation);
           })
         );
@@ -405,9 +398,6 @@ export class ObservabilityAIAssistantClient {
                             // update messages
                             { messages: initialMessagesWithAddedMessages },
 
-                            // update access
-                            { access },
-
                             // update token count
                             {
                               conversation: {
@@ -440,8 +430,7 @@ export class ObservabilityAIAssistantClient {
                           id: conversationId,
                           token_count: tokenCountResult,
                         },
-                        access,
-                        system: !!isSystem,
+                        public: !!isPublic,
                         labels: {},
                         numeric_labels: {},
                         messages: initialMessagesWithAddedMessages,
@@ -717,7 +706,7 @@ export class ObservabilityAIAssistantClient {
     return updatedConversation;
   };
 
-  forkConversation = async (conversationId: string, isSystem: boolean): Promise<Conversation> => {
+  forkConversation = async (conversationId: string): Promise<Conversation> => {
     const conversation = await this.getConversationWithMetaFields(conversationId);
 
     if (!conversation) {
@@ -730,7 +719,7 @@ export class ObservabilityAIAssistantClient {
         ..._source.conversation,
         id: v4(),
       },
-      system: isSystem,
+      public: false,
     };
     return this.create(forkedConversation);
   };

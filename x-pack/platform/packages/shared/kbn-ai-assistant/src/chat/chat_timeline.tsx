@@ -46,8 +46,9 @@ export interface ChatTimelineItem
 }
 
 export interface ChatTimelineProps {
+  conversationId?: string;
   messages: Message[];
-  isSystem?: boolean;
+  hasUser: boolean;
   knowledgeBase: UseKnowledgeBaseResult;
   chatService: ObservabilityAIAssistantChatService;
   hasConnector: boolean;
@@ -69,8 +70,9 @@ export interface ChatTimelineProps {
 }
 
 export function ChatTimeline({
+  conversationId,
   messages,
-  isSystem,
+  hasUser,
   chatService,
   hasConnector,
   currentUser,
@@ -85,10 +87,11 @@ export function ChatTimeline({
 }: ChatTimelineProps) {
   const items = useMemo(() => {
     const timelineItems = getTimelineItemsfromConversation({
+      conversationId,
       chatService,
       hasConnector,
+      hasUser,
       messages,
-      isSystem,
       currentUser,
       isConversationOwnedByCurrentUser,
       chatState,
@@ -116,10 +119,11 @@ export function ChatTimeline({
 
     return consolidatedChatItems;
   }, [
+    conversationId,
     chatService,
     hasConnector,
-    isSystem,
     messages,
+    hasUser,
     currentUser,
     chatState,
     isConversationOwnedByCurrentUser,

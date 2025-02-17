@@ -15,7 +15,6 @@ import {
   MessageRole,
   type ObservabilityAIAssistantScreenContextRequest,
   type StarterPrompt,
-  ConversationAccess,
 } from '../../common/types';
 
 export const messageRt: t.Type<Message> = t.type({
@@ -58,27 +57,21 @@ const tokenCountRt = t.type({
   total: t.number,
 });
 
-export const baseConversationRt: t.Type<ConversationRequestBase> = t.intersection([
-  t.type({
-    '@timestamp': t.string,
-    conversation: t.intersection([
-      t.type({
-        title: t.string,
-      }),
-      t.partial({
-        token_count: tokenCountRt,
-      }),
-    ]),
-    messages: t.array(messageRt),
-    labels: t.record(t.string, t.string),
-    numeric_labels: t.record(t.string, t.number),
-  }),
-  t.partial({
-    system: toBooleanRt,
-    public: t.boolean,
-    access: t.union([t.literal(ConversationAccess.Private), t.literal(ConversationAccess.Shared)]),
-  }),
-]);
+export const baseConversationRt: t.Type<ConversationRequestBase> = t.type({
+  '@timestamp': t.string,
+  conversation: t.intersection([
+    t.type({
+      title: t.string,
+    }),
+    t.partial({
+      token_count: tokenCountRt,
+    }),
+  ]),
+  messages: t.array(messageRt),
+  labels: t.record(t.string, t.string),
+  numeric_labels: t.record(t.string, t.number),
+  public: toBooleanRt,
+});
 
 export const assistantScopeType = t.union([
   t.literal('observability'),

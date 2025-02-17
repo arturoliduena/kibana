@@ -38,6 +38,7 @@ const mockConversations: UseConversationListResult['conversations'] = {
         numeric_labels: {},
         messages: [],
         namespace: 'namespace-1',
+        public: true,
       },
       {
         conversation: {
@@ -50,6 +51,7 @@ const mockConversations: UseConversationListResult['conversations'] = {
         numeric_labels: {},
         messages: [],
         namespace: 'namespace-2',
+        public: true,
       },
     ],
   },

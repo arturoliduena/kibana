@@ -155,15 +155,15 @@ export function ChatBody({
 
   const {
     conversation,
-    isSystem,
+    conversationId,
     messages,
     next,
     state,
     stop,
     saveTitle,
     forkConversation,
-    access,
     isConversationOwnedByCurrentUser,
+    hasUser,
   } = useConversation({
     currentUser,
     initialConversationId,
@@ -416,8 +416,9 @@ export function ChatBody({
               ) : (
                 <>
                   <ChatTimeline
+                    conversationId={conversationId}
                     messages={messages}
-                    isSystem={isSystem}
+                    hasUser={hasUser}
                     knowledgeBase={knowledgeBase}
                     chatService={chatService}
                     currentUser={currentUser}
@@ -439,7 +440,7 @@ export function ChatBody({
                     onStopGenerating={stop}
                     onActionClick={handleActionClick}
                   />
-                  {isSystem ? (
+                  {conversationId && !isConversationOwnedByCurrentUser && !hasUser ? (
                     <>
                       <EuiPanel paddingSize="m" hasShadow={false} color="subdued">
                         <EuiFlexGroup>
@@ -490,7 +491,11 @@ export function ChatBody({
             className={promptEditorContainerClassName}
           >
             <PromptEditor
-              disabled={!connectors.selectedConnector || !hasCorrectLicense || !!isSystem}
+              disabled={
+                !connectors.selectedConnector ||
+                !hasCorrectLicense ||
+                (!!conversationId && !isConversationOwnedByCurrentUser)
+              }
               hidden={connectors.loading || connectors.connectors?.length === 0}
               loading={isLoading}
               onChangeHeight={handleChangeHeight}
@@ -567,18 +572,13 @@ export function ChatBody({
       <EuiFlexItem grow={false} className={headerContainerClassName}>
         <ChatHeader
           connectors={connectors}
-          conversationId={
-            conversation.value?.conversation && 'id' in conversation.value.conversation
-              ? conversation.value.conversation.id
-              : undefined
-          }
+          conversationId={conversationId}
           flyoutPositionMode={flyoutPositionMode}
           licenseInvalid={!hasCorrectLicense && !initialConversationId}
           loading={isLoading}
           title={title}
           onCopyConversation={handleCopyConversation}
           onForkConversation={handleForkConversation}
-          access={access}
           onSaveTitle={(newTitle) => {
             saveTitle(newTitle);
           }}
