@@ -403,9 +403,9 @@ If available, include the link of the conversation at the end of your answer.`
     )
     .pipe(concatenateChatCompletionChunks())
     .subscribe({
-      complete: () => {
+      complete: async () => {
         if (ruleCreatedBy && conversationId) {
-          client.setConversationUser(conversationId, { name: ruleCreatedBy.name });
+          await client.setConversationUser(conversationId, { name: ruleCreatedBy.name });
         }
       },
       error: (err) => {
