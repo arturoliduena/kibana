@@ -48,7 +48,6 @@ export interface ChatTimelineItem
 export interface ChatTimelineProps {
   conversationId?: string;
   messages: Message[];
-  hasUser: boolean;
   knowledgeBase: UseKnowledgeBaseResult;
   chatService: ObservabilityAIAssistantChatService;
   hasConnector: boolean;
@@ -72,7 +71,6 @@ export interface ChatTimelineProps {
 export function ChatTimeline({
   conversationId,
   messages,
-  hasUser,
   chatService,
   hasConnector,
   currentUser,
@@ -90,7 +88,6 @@ export function ChatTimeline({
       conversationId,
       chatService,
       hasConnector,
-      hasUser,
       messages,
       currentUser,
       isConversationOwnedByCurrentUser,
@@ -123,7 +120,6 @@ export function ChatTimeline({
     chatService,
     hasConnector,
     messages,
-    hasUser,
     currentUser,
     chatState,
     isConversationOwnedByCurrentUser,
@@ -147,6 +143,7 @@ export function ChatTimeline({
             onRegenerate={onRegenerate}
             onSendTelemetry={onSendTelemetry}
             onStopGenerating={onStopGenerating}
+            isConversationOwnedByCurrentUser={isConversationOwnedByCurrentUser}
           />
         ) : (
           <ChatItem
@@ -165,6 +162,7 @@ export function ChatTimeline({
             }}
             onSendTelemetry={onSendTelemetry}
             onStopGeneratingClick={onStopGenerating}
+            isConversationOwnedByCurrentUser={isConversationOwnedByCurrentUser}
           />
         );
       })}

@@ -64,7 +64,6 @@ export function getTimelineItemsfromConversation({
   chatService,
   currentUser,
   hasConnector,
-  hasUser,
   messages,
   chatState,
   isConversationOwnedByCurrentUser,
@@ -75,7 +74,6 @@ export function getTimelineItemsfromConversation({
   currentUser?: Pick<AuthenticatedUser, 'username' | 'full_name'>;
   hasConnector: boolean;
   messages: Message[];
-  hasUser: boolean;
   chatState: ChatState;
   isConversationOwnedByCurrentUser: boolean;
   onActionClick: ({
@@ -96,13 +94,13 @@ export function getTimelineItemsfromConversation({
       message: {
         '@timestamp': new Date().toISOString(),
         message: {
-          role: !!conversationId && !hasUser ? MessageRole.System : MessageRole.User,
+          role: !!conversationId && !currentUser ? MessageRole.System : MessageRole.User,
         },
       },
       title: i18n.translate('xpack.aiAssistant.conversationStartTitle', {
         defaultMessage: 'started a conversation',
       }),
-      role: !!conversationId && !hasUser ? MessageRole.System : MessageRole.User,
+      role: !!conversationId && !currentUser ? MessageRole.System : MessageRole.User,
     },
     ...messages.map((message, index) => {
       const id = v4();

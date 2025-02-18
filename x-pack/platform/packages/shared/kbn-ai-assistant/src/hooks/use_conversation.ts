@@ -51,7 +51,7 @@ export interface UseConversationProps {
 export type UseConversationResult = {
   conversation: AbortableAsyncState<ConversationCreateRequest | Conversation | undefined>;
   conversationId?: string;
-  hasUser: boolean;
+  user?: Pick<AuthenticatedUser, 'username' | 'profile_uid'>;
   isConversationOwnedByCurrentUser: boolean;
   saveTitle: (newTitle: string) => void;
   forkConversation: () => Promise<Conversation>;
@@ -209,7 +209,13 @@ export function useConversation({
     isConversationOwnedByCurrentUser: isConversationOwnedByUser(
       (conversation.value as Conversation)?.user
     ),
-    hasUser: (conversation.value?.conversation && 'user' in conversation.value) ?? false,
+    user:
+      conversation.value?.conversation && 'user' in conversation.value
+        ? {
+            profile_uid: conversation.value.user?.id,
+            username: conversation.value.user?.name || '',
+          }
+        : undefined,
     state,
     next: (_messages: Message[]) =>
       next(_messages, (error) => {
