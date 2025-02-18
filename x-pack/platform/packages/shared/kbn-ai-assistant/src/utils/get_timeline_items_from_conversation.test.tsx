@@ -38,7 +38,6 @@ describe('getTimelineItemsFromConversation', () => {
   describe('returns an opening message only', () => {
     items = getTimelineItemsfromConversation({
       isConversationOwnedByCurrentUser: true,
-      hasUser: true,
       chatService: mockChatService,
       hasConnector: true,
       messages: [],
@@ -54,7 +53,6 @@ describe('getTimelineItemsFromConversation', () => {
     beforeEach(() => {
       items = getTimelineItemsfromConversation({
         isConversationOwnedByCurrentUser: true,
-        hasUser: true,
         chatService: mockChatService,
         hasConnector: true,
         currentUser: {
@@ -107,7 +105,6 @@ describe('getTimelineItemsFromConversation', () => {
       mockChatService.hasRenderFunction.mockImplementation(() => false);
       items = getTimelineItemsfromConversation({
         isConversationOwnedByCurrentUser: true,
-        hasUser: true,
         chatService: mockChatService,
         hasConnector: true,
         chatState: ChatState.Ready,
@@ -193,7 +190,6 @@ describe('getTimelineItemsFromConversation', () => {
       mockChatService.renderFunction.mockImplementation(() => 'Rendered');
       items = getTimelineItemsfromConversation({
         isConversationOwnedByCurrentUser: true,
-        hasUser: true,
         chatService: mockChatService,
         hasConnector: true,
         chatState: ChatState.Ready,
@@ -266,7 +262,6 @@ describe('getTimelineItemsFromConversation', () => {
     beforeEach(() => {
       items = getTimelineItemsfromConversation({
         isConversationOwnedByCurrentUser: true,
-        hasUser: true,
         chatService: mockChatService,
         hasConnector: true,
         chatState: ChatState.Ready,
@@ -339,7 +334,6 @@ describe('getTimelineItemsFromConversation', () => {
     beforeEach(() => {
       items = getTimelineItemsfromConversation({
         isConversationOwnedByCurrentUser: true,
-        hasUser: true,
         chatService: mockChatService,
         hasConnector: true,
         currentUser: {
@@ -389,7 +383,6 @@ describe('getTimelineItemsFromConversation', () => {
       mockChatService.hasRenderFunction.mockImplementation(() => false);
       items = getTimelineItemsfromConversation({
         isConversationOwnedByCurrentUser: true,
-        hasUser: true,
         chatService: mockChatService,
         hasConnector: true,
         chatState: ChatState.Ready,
@@ -460,7 +453,6 @@ describe('getTimelineItemsFromConversation', () => {
     const renderWithLoading = (extraMessages: Message[]) => {
       items = getTimelineItemsfromConversation({
         isConversationOwnedByCurrentUser: true,
-        hasUser: true,
         chatService: mockChatService,
         hasConnector: true,
         chatState: ChatState.Loading,
