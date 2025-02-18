@@ -679,22 +679,21 @@ export class ObservabilityAIAssistantClient {
     return updatedConversation;
   };
 
-  forkConversation = async (conversationId: string): Promise<Conversation> => {
+  duplicateConversation = async (conversationId: string): Promise<Conversation> => {
     const conversation = await this.getConversationWithMetaFields(conversationId);
 
     if (!conversation) {
       throw notFound();
     }
     const _source = conversation._source!;
-    const forkedConversation: Conversation = {
+    return this.create({
       ..._source,
       conversation: {
         ..._source.conversation,
         id: v4(),
       },
       public: false,
-    };
-    return this.create(forkedConversation);
+    });
   };
 
   recall = async ({

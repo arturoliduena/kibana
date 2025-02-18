@@ -25,13 +25,13 @@ export function ChatActionsMenu({
   conversationId,
   disabled,
   onCopyConversationClick,
-  onForkConversationClick,
+  onDuplicateConversationClick,
 }: {
   connectors: UseGenAIConnectorsResult;
   conversationId?: string;
   disabled: boolean;
   onCopyConversationClick: () => void;
-  onForkConversationClick: () => void;
+  onDuplicateConversationClick: () => void;
 }) {
   const { application, http } = useKibana().services;
   const knowledgeBase = useKnowledgeBase();
@@ -150,7 +150,7 @@ export function ChatActionsMenu({
                 disabled: !conversationId,
                 onClick: () => {
                   toggleActionsMenu();
-                  onForkConversationClick();
+                  onDuplicateConversationClick();
                 },
               },
             ],

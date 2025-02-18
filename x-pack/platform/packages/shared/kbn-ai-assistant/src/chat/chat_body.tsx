@@ -161,7 +161,7 @@ export function ChatBody({
     state,
     stop,
     saveTitle,
-    forkConversation,
+    duplicateConversation,
     isConversationOwnedByCurrentUser,
     user: userConversation,
   } = useConversation({
@@ -268,8 +268,8 @@ export function ChatBody({
     }
   });
 
-  const handleForkConversation = () => {
-    forkConversation().then((response) => {
+  const handleDuplicateConversation = () => {
+    duplicateConversation().then((response) => {
       handleRefreshConversations?.();
       navigateToConversation?.(response.conversation.id);
     });
@@ -454,7 +454,11 @@ export function ChatBody({
                                 it into a new private conversation. The original conversation will
                                 remain unchanged.
                               </p>
-                              <EuiButton onClick={handleForkConversation} iconType="copy" size="s">
+                              <EuiButton
+                                onClick={handleDuplicateConversation}
+                                iconType="copy"
+                                size="s"
+                              >
                                 Duplicate
                               </EuiButton>
                             </EuiText>
@@ -577,7 +581,7 @@ export function ChatBody({
           loading={isLoading}
           title={title}
           onCopyConversation={handleCopyConversation}
-          onForkConversation={handleForkConversation}
+          onDuplicateConversation={handleDuplicateConversation}
           onSaveTitle={(newTitle) => {
             saveTitle(newTitle);
           }}

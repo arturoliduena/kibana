@@ -105,8 +105,8 @@ const createConversationRoute = createObservabilityAIAssistantServerRoute({
   },
 });
 
-const forkConversationRoute = createObservabilityAIAssistantServerRoute({
-  endpoint: 'POST /internal/observability_ai_assistant/conversation/{conversationId}/fork',
+const duplicateConversationRoute = createObservabilityAIAssistantServerRoute({
+  endpoint: 'POST /internal/observability_ai_assistant/conversation/{conversationId}/duplicate',
   params: t.type({
     path: t.type({
       conversationId: t.string,
@@ -126,7 +126,7 @@ const forkConversationRoute = createObservabilityAIAssistantServerRoute({
       throw notImplemented();
     }
 
-    return client.forkConversation(params.path.conversationId);
+    return client.duplicateConversation(params.path.conversationId);
   },
 });
 
@@ -223,5 +223,5 @@ export const conversationRoutes = {
   ...updateConversationRoute,
   ...updateConversationTitle,
   ...deleteConversationRoute,
-  ...forkConversationRoute,
+  ...duplicateConversationRoute,
 };

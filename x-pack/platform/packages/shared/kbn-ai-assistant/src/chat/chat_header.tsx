@@ -48,7 +48,7 @@ export function ChatHeader({
   title,
   isConversationOwnedByCurrentUser,
   onCopyConversation,
-  onForkConversation,
+  onDuplicateConversation,
   onSaveTitle,
   onToggleFlyoutPositionMode,
   navigateToConversation,
@@ -61,7 +61,7 @@ export function ChatHeader({
   title: string;
   isConversationOwnedByCurrentUser: boolean;
   onCopyConversation: () => void;
-  onForkConversation: () => void;
+  onDuplicateConversation: () => void;
   onSaveTitle: (title: string) => void;
   onToggleFlyoutPositionMode?: (newFlyoutPositionMode: FlyoutPositionMode) => void;
   navigateToConversation?: (nextConversationId?: string) => void;
@@ -206,7 +206,7 @@ export function ChatHeader({
                 conversationId={conversationId}
                 disabled={licenseInvalid}
                 onCopyConversationClick={onCopyConversation}
-                onForkConversationClick={onForkConversation}
+                onDuplicateConversationClick={onDuplicateConversation}
               />
             </EuiFlexItem>
           </EuiFlexGroup>

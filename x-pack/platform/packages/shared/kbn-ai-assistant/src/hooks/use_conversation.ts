@@ -54,7 +54,7 @@ export type UseConversationResult = {
   user?: Pick<AuthenticatedUser, 'username' | 'profile_uid'>;
   isConversationOwnedByCurrentUser: boolean;
   saveTitle: (newTitle: string) => void;
-  forkConversation: () => Promise<Conversation>;
+  duplicateConversation: () => Promise<Conversation>;
 } & Omit<UseChatResult, 'setMessages'>;
 
 const DEFAULT_INITIAL_MESSAGES: Message[] = [];
@@ -117,23 +117,26 @@ export function useConversation({
       });
   };
 
-  const fork = () => {
+  const duplicateConversation = () => {
     if (!displayedConversationId || !conversation.value) {
-      throw new Error('Cannot save fork if conversation is not stored');
+      throw new Error('Cannot duplicate the conversation if conversation is not stored');
     }
     return service
-      .callApi(`POST /internal/observability_ai_assistant/conversation/{conversationId}/fork`, {
-        signal: null,
-        params: {
-          path: {
-            conversationId: displayedConversationId,
+      .callApi(
+        `POST /internal/observability_ai_assistant/conversation/{conversationId}/duplicate`,
+        {
+          signal: null,
+          params: {
+            path: {
+              conversationId: displayedConversationId,
+            },
           },
-        },
-      })
+        }
+      )
       .catch((err) => {
         notifications!.toasts.addError(err, {
           title: i18n.translate('xpack.aiAssistant.errorForkingConversation', {
-            defaultMessage: 'Could not fork conversation',
+            defaultMessage: 'Could not duplicate conversation',
           }),
         });
         throw err;
@@ -240,6 +243,6 @@ export function useConversation({
           onConversationUpdate?.(nextConversation);
         });
     },
-    forkConversation: fork,
+    duplicateConversation,
   };
 }
