@@ -46,6 +46,7 @@ export interface UseConversationProps {
   chatService: ObservabilityAIAssistantChatService;
   connectorId: string | undefined;
   onConversationUpdate?: (conversation: { conversation: Conversation['conversation'] }) => void;
+  onConversationDuplicated: (conversation: Conversation) => void;
 }
 
 export type UseConversationResult = {
@@ -67,6 +68,7 @@ export function useConversation({
   chatService,
   connectorId,
   onConversationUpdate,
+  onConversationDuplicated,
 }: UseConversationProps): UseConversationResult {
   const service = useAIAssistantAppService();
   const scopes = useScopes();
@@ -117,12 +119,12 @@ export function useConversation({
       });
   };
 
-  const duplicateConversation = () => {
+  const duplicateConversation = async () => {
     if (!displayedConversationId || !conversation.value) {
       throw new Error('Cannot duplicate the conversation if conversation is not stored');
     }
-    return service
-      .callApi(
+    try {
+      const duplicatedConversation = await service.callApi(
         `POST /internal/observability_ai_assistant/conversation/{conversationId}/duplicate`,
         {
           signal: null,
@@ -132,15 +134,17 @@ export function useConversation({
             },
           },
         }
-      )
-      .catch((err) => {
-        notifications!.toasts.addError(err, {
-          title: i18n.translate('xpack.aiAssistant.errorDuplicatingConversation', {
-            defaultMessage: 'Could not duplicate conversation',
-          }),
-        });
-        throw err;
+      );
+      onConversationDuplicated(duplicatedConversation);
+      return duplicatedConversation;
+    } catch (err) {
+      notifications!.toasts.addError(err, {
+        title: i18n.translate('xpack.aiAssistant.errorDuplicatingConversation', {
+          defaultMessage: 'Could not duplicate conversation',
+        }),
       });
+      throw err;
+    }
   };
 
   const { next, messages, setMessages, state, stop } = useChat({

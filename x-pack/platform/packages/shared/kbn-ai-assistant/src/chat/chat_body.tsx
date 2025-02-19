@@ -121,7 +121,7 @@ export function ChatBody({
   onConversationUpdate,
   onToggleFlyoutPositionMode,
   navigateToConversation,
-  handleRefreshConversations,
+  onConversationDuplicated,
 }: {
   connectors: ReturnType<typeof useGenAIConnectors>;
   currentUser?: Pick<AuthenticatedUser, 'full_name' | 'username' | 'profile_uid'>;
@@ -132,9 +132,9 @@ export function ChatBody({
   knowledgeBase: UseKnowledgeBaseResult;
   showLinkToConversationsApp: boolean;
   onConversationUpdate: (conversation: { conversation: Conversation['conversation'] }) => void;
+  onConversationDuplicated: (conversation: Conversation) => void;
   onToggleFlyoutPositionMode?: (flyoutPositionMode: FlyoutPositionMode) => void;
   navigateToConversation?: (conversationId?: string) => void;
-  handleRefreshConversations?: () => void;
 }) {
   const license = useLicense();
   const hasCorrectLicense = license?.hasAtLeast('enterprise');
@@ -172,6 +172,7 @@ export function ChatBody({
     chatService,
     connectorId: connectors.selectedConnector,
     onConversationUpdate,
+    onConversationDuplicated,
   });
 
   const timelineContainerRef = useRef<HTMLDivElement | null>(null);
@@ -267,13 +268,6 @@ export function ChatBody({
       parent.scrollTop = parent.scrollHeight;
     }
   });
-
-  const handleDuplicateConversation = () => {
-    duplicateConversation().then((response) => {
-      handleRefreshConversations?.();
-      navigateToConversation?.(response.conversation.id);
-    });
-  };
 
   const handleCopyConversation = () => {
     const deserializedMessages = (conversation.value?.messages ?? messages).map(deserializeMessage);
@@ -454,11 +448,7 @@ export function ChatBody({
                                 it into a new private conversation. The original conversation will
                                 remain unchanged.
                               </p>
-                              <EuiButton
-                                onClick={handleDuplicateConversation}
-                                iconType="copy"
-                                size="s"
-                              >
+                              <EuiButton onClick={duplicateConversation} iconType="copy" size="s">
                                 Duplicate
                               </EuiButton>
                             </EuiText>
@@ -581,7 +571,7 @@ export function ChatBody({
           loading={isLoading}
           title={title}
           onCopyConversation={handleCopyConversation}
-          onDuplicateConversation={handleDuplicateConversation}
+          onDuplicateConversation={duplicateConversation}
           onSaveTitle={(newTitle) => {
             saveTitle(newTitle);
           }}
