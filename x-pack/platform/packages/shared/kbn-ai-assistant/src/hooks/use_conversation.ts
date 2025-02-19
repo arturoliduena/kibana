@@ -195,14 +195,15 @@ export function useConversation({
     );
 
   const isConversationOwnedByUser = (conversationUser: Conversation['user']): boolean => {
-    if (!conversationUser || !currentUser) {
-      return false;
-    }
+    if (!initialConversationId) return true;
+
+    if (!conversationUser || !currentUser) return false;
 
     return conversationUser.id && currentUser.profile_uid
       ? conversationUser.id === currentUser.profile_uid
       : conversationUser.name === currentUser.username;
   };
+
   return {
     conversation,
     conversationId:
@@ -213,12 +214,12 @@ export function useConversation({
       (conversation.value as Conversation)?.user
     ),
     user:
-      conversation.value?.conversation && 'user' in conversation.value
+      initialConversationId && conversation.value?.conversation && 'user' in conversation.value
         ? {
             profile_uid: conversation.value.user?.id,
             username: conversation.value.user?.name || '',
           }
-        : undefined,
+        : currentUser,
     state,
     next: (_messages: Message[]) =>
       next(_messages, (error) => {

@@ -163,7 +163,7 @@ export function ChatBody({
     saveTitle,
     duplicateConversation,
     isConversationOwnedByCurrentUser,
-    user: userConversation,
+    user: conversationUser,
   } = useConversation({
     currentUser,
     initialConversationId,
@@ -420,7 +420,7 @@ export function ChatBody({
                     messages={messages}
                     knowledgeBase={knowledgeBase}
                     chatService={chatService}
-                    currentUser={userConversation}
+                    currentUser={conversationUser}
                     isConversationOwnedByCurrentUser={isConversationOwnedByCurrentUser}
                     chatState={state}
                     hasConnector={!!connectors.connectors?.length}

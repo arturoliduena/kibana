@@ -657,7 +657,7 @@ export class ObservabilityAIAssistantClient {
   ): Promise<Conversation> => {
     const persistedConversation = await this.getConversationWithMetaFields(conversationId);
 
-    if (!persistedConversation) {
+    if (!persistedConversation || !persistedConversation?._id) {
       throw notFound();
     }
 
