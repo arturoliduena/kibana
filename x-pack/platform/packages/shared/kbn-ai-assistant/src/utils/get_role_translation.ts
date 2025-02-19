@@ -8,7 +8,15 @@
 import { i18n } from '@kbn/i18n';
 import { MessageRole } from '@kbn/observability-ai-assistant-plugin/public';
 
-export function getRoleTranslation(role: MessageRole, isCurrentUser: boolean, username?: string) {
+export function getRoleTranslation({
+  role,
+  isCurrentUser,
+  username,
+}: {
+  role: MessageRole;
+  isCurrentUser: boolean;
+  username?: string;
+}) {
   if (role === MessageRole.User) {
     return isCurrentUser
       ? i18n.translate('xpack.aiAssistant.chatTimeline.messages.user.label', {

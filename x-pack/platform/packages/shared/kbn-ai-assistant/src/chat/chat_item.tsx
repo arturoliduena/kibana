@@ -169,7 +169,11 @@ export function ChatItem({
   return (
     <EuiComment
       timelineAvatar={<ChatItemAvatar loading={loading} currentUser={currentUser} role={role} />}
-      username={getRoleTranslation(role, isConversationOwnedByCurrentUser, currentUser?.username)}
+      username={getRoleTranslation({
+        role,
+        isCurrentUser: isConversationOwnedByCurrentUser,
+        username: currentUser?.username,
+      })}
       event={title}
       actions={
         <ChatItemActions

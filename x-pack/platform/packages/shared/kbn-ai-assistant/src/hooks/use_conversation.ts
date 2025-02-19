@@ -215,7 +215,7 @@ export function useConversation({
         ? conversation.value.conversation.id
         : undefined,
     isConversationOwnedByCurrentUser: isConversationOwnedByUser(
-      (conversation.value as Conversation)?.user
+      conversation.value && 'user' in conversation.value ? conversation.value.user : undefined
     ),
     user:
       initialConversationId && conversation.value?.conversation && 'user' in conversation.value
