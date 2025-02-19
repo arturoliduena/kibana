@@ -310,7 +310,7 @@ export class ObservabilityAIAssistantClient {
               return throwError(() => createConversationNotFoundError());
             }
 
-            if (conversation?._source && !this.isConversationOwnedByUser(conversation?._source!)) {
+            if (conversation?._source && !this.isConversationOwnedByUser(conversation._source)) {
               throw new Error('Cannot update conversation that is not owned by the user');
             }
 
@@ -670,7 +670,7 @@ export class ObservabilityAIAssistantClient {
     });
 
     await this.dependencies.esClient.asInternalUser.update({
-      id: persistedConversation._id!,
+      id: persistedConversation._id,
       index: persistedConversation._index,
       doc: updatedConversation,
       refresh: true,

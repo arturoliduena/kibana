@@ -135,7 +135,7 @@ export function useConversation({
       )
       .catch((err) => {
         notifications!.toasts.addError(err, {
-          title: i18n.translate('xpack.aiAssistant.errorForkingConversation', {
+          title: i18n.translate('xpack.aiAssistant.errorDuplicatingConversation', {
             defaultMessage: 'Could not duplicate conversation',
           }),
         });

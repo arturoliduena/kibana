@@ -145,7 +145,7 @@ export function ChatActionsMenu({
               },
               {
                 name: i18n.translate('xpack.aiAssistant.chatHeader.actions.duplicateConversation', {
-                  defaultMessage: 'Duplicate conversation',
+                  defaultMessage: 'Duplicate',
                 }),
                 disabled: !conversationId,
                 onClick: () => {
