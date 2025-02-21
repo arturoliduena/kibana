@@ -88,7 +88,7 @@ export function ChatFlyout({
 
   const { key: bodyKey, updateConversationIdInPlace } = useConversationKey(conversationId);
 
-  const onConversationDuplicated = (conversation: Conversation) => {
+  const onConversationDuplicate = (conversation: Conversation) => {
     conversationList.conversations.refresh();
     setConversationId(conversation.conversation.id);
   };
@@ -292,7 +292,7 @@ export function ChatFlyout({
                     }
                   : undefined
               }
-              onConversationDuplicated={onConversationDuplicated}
+              onConversationDuplicate={onConversationDuplicate}
             />
           </EuiFlexItem>
 

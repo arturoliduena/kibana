@@ -88,7 +88,7 @@ export const ConversationView: React.FC<ConversationViewProps> = ({
     handleRefreshConversations();
   };
 
-  const onConversationDuplicated = (conversation: Conversation) => {
+  const handleConversationDuplicate = (conversation: Conversation) => {
     handleRefreshConversations();
     navigateToConversation?.(conversation.conversation.id);
   };
@@ -182,7 +182,7 @@ export const ConversationView: React.FC<ConversationViewProps> = ({
             showLinkToConversationsApp={false}
             onConversationUpdate={handleConversationUpdate}
             navigateToConversation={navigateToConversation}
-            onConversationDuplicated={onConversationDuplicated}
+            onConversationDuplicate={handleConversationDuplicate}
           />
 
           <div className={sidebarContainerClass}>

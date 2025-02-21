@@ -68,7 +68,7 @@ export function useConversation({
   chatService,
   connectorId,
   onConversationUpdate,
-  onConversationDuplicated,
+  onConversationDuplicate,
 }: UseConversationProps): UseConversationResult {
   const service = useAIAssistantAppService();
   const scopes = useScopes();
@@ -135,7 +135,7 @@ export function useConversation({
           },
         }
       );
-      onConversationDuplicated(duplicatedConversation);
+      onConversationDuplicate(duplicatedConversation);
       return duplicatedConversation;
     } catch (err) {
       notifications!.toasts.addError(err, {

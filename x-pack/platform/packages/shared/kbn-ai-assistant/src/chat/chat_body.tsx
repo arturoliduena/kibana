@@ -132,7 +132,7 @@ export function ChatBody({
   knowledgeBase: UseKnowledgeBaseResult;
   showLinkToConversationsApp: boolean;
   onConversationUpdate: (conversation: { conversation: Conversation['conversation'] }) => void;
-  onConversationDuplicated: (conversation: Conversation) => void;
+  onConversationDuplicate: (conversation: Conversation) => void;
   onToggleFlyoutPositionMode?: (flyoutPositionMode: FlyoutPositionMode) => void;
   navigateToConversation?: (conversationId?: string) => void;
 }) {
@@ -172,7 +172,7 @@ export function ChatBody({
     chatService,
     connectorId: connectors.selectedConnector,
     onConversationUpdate,
-    onConversationDuplicated,
+    onConversationDuplicate,
   });
 
   const timelineContainerRef = useRef<HTMLDivElement | null>(null);
