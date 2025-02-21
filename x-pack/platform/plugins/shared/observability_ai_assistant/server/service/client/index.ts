@@ -311,7 +311,7 @@ export class ObservabilityAIAssistantClient {
             }
 
             if (conversation?._source && !this.isConversationOwnedByUser(conversation._source)) {
-              throw new Error('Cannot update conversation that is not owned by the user');
+              return throwError(() => new Error('Cannot update conversation that is not owned by the user'));
             }
 
             return of(conversation);
