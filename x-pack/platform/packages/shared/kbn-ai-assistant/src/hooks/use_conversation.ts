@@ -46,7 +46,7 @@ export interface UseConversationProps {
   chatService: ObservabilityAIAssistantChatService;
   connectorId: string | undefined;
   onConversationUpdate?: (conversation: { conversation: Conversation['conversation'] }) => void;
-  onConversationDuplicated: (conversation: Conversation) => void;
+  onConversationDuplicate: (conversation: Conversation) => void;
 }
 
 export type UseConversationResult = {

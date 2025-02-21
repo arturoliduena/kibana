@@ -121,7 +121,7 @@ export function ChatBody({
   onConversationUpdate,
   onToggleFlyoutPositionMode,
   navigateToConversation,
-  onConversationDuplicated,
+  onConversationDuplicate,
 }: {
   connectors: ReturnType<typeof useGenAIConnectors>;
   currentUser?: Pick<AuthenticatedUser, 'full_name' | 'username' | 'profile_uid'>;

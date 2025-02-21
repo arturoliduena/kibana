@@ -98,7 +98,7 @@ describe('useConversation', () => {
               },
             ],
             initialConversationId: 'foo',
-            onConversationDuplicated: jest.fn(),
+            onConversationDuplicate: jest.fn(),
           },
           wrapper,
         })
@@ -112,7 +112,7 @@ describe('useConversation', () => {
         initialProps: {
           chatService: mockChatService,
           connectorId: 'my-connector',
-          onConversationDuplicated: jest.fn(),
+          onConversationDuplicate: jest.fn(),
         },
         wrapper,
       });
@@ -146,7 +146,7 @@ describe('useConversation', () => {
               },
             },
           ],
-          onConversationDuplicated: jest.fn(),
+          onConversationDuplicate: jest.fn(),
         },
         wrapper,
       });
@@ -188,7 +188,7 @@ describe('useConversation', () => {
           chatService: mockChatService,
           connectorId: 'my-connector',
           initialConversationId: 'my-conversation-id',
-          onConversationDuplicated: jest.fn(),
+          onConversationDuplicate: jest.fn(),
         },
         wrapper,
       });
@@ -236,7 +236,7 @@ describe('useConversation', () => {
           chatService: mockChatService,
           connectorId: 'my-connector',
           initialConversationId: 'my-conversation-id',
-          onConversationDuplicated: jest.fn(),
+          onConversationDuplicate: jest.fn(),
         },
         wrapper,
       });
@@ -323,7 +323,7 @@ describe('useConversation', () => {
             },
           ],
           onConversationUpdate,
-          onConversationDuplicated: jest.fn(),
+          onConversationDuplicate: jest.fn(),
         },
         wrapper,
       });
@@ -402,7 +402,7 @@ describe('useConversation', () => {
                 },
               ],
               initialConversationId: 'foo',
-              onConversationDuplicated: jest.fn(),
+              onConversationDuplicate: jest.fn(),
             },
             wrapper,
           });
@@ -446,7 +446,7 @@ describe('useConversation', () => {
               chatService: mockChatService,
               connectorId: 'my-connector',
               initialConversationId: 'my-conversation-id',
-              onConversationDuplicated: jest.fn(),
+              onConversationDuplicate: jest.fn(),
             },
             wrapper,
           });
