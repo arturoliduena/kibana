@@ -237,7 +237,7 @@ describe('observabilityAIAssistant rule_connector', () => {
       expect(completeMock).toHaveBeenCalledWith(
         expect.objectContaining({
           persist: true,
-          isPublic: true,
+          isPublic: false,
           connectorId: 'azure-open-ai',
           kibanaPublicUrl: 'http://kibana.com',
           messages: buildConversation(message),
@@ -269,7 +269,7 @@ describe('observabilityAIAssistant rule_connector', () => {
       expect(completeMock).toHaveBeenCalledWith(
         expect.objectContaining({
           persist: true,
-          isPublic: true,
+          isPublic: false,
           connectorId: 'azure-open-ai',
           kibanaPublicUrl: 'http://kibana.com',
           messages: buildConversation(message),
@@ -305,7 +305,7 @@ describe('observabilityAIAssistant rule_connector', () => {
       expect(completeMock).toHaveBeenCalledWith(
         expect.objectContaining({
           persist: true,
-          isPublic: true,
+          isPublic: false,
           connectorId: 'azure-open-ai',
           kibanaPublicUrl: 'http://kibana.com',
           messages: buildConversation(message),
@@ -314,7 +314,7 @@ describe('observabilityAIAssistant rule_connector', () => {
       expect(completeMock).toHaveBeenCalledWith(
         expect.objectContaining({
           persist: true,
-          isPublic: true,
+          isPublic: false,
           connectorId: 'azure-open-ai',
           kibanaPublicUrl: 'http://kibana.com',
           messages: buildConversation(message2),
