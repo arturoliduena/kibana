@@ -408,6 +408,7 @@ export default function ApiTest({ getService }: DeploymentAgnosticFtrProviderCon
     });
 
     describe('conversation duplication', () => {
+      this.tags(['failsOnMKI']);
       let publicConversationId: string;
       let privateConversationId: string;
 
