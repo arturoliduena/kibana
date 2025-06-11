@@ -22,7 +22,7 @@ import {
   throwError,
 } from 'rxjs';
 import { withExecuteToolSpan } from '@kbn/inference-plugin/server';
-import { CONTEXT_FUNCTION_NAME } from '../../../functions/context';
+import { CONTEXT_FUNCTION_NAME } from '../../../tools/functions/context';
 import { createFunctionNotFoundError, Message, MessageRole } from '../../../../common';
 import {
   createFunctionLimitExceededError,
